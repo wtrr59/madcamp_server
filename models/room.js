@@ -11,7 +11,7 @@ class Room {
     
     //userId와 position을 받아서 해당 list의 맨앞에 user추가
     addUser(userId, position){
-        console.log(this.num+" "+userId +" "+position);
+        console.log('addUser :'+ (this.num+2) +" "+userId +" "+position);
         if(position === 'top'){
             this.top.unshift(userId);
         }
@@ -25,13 +25,13 @@ class Room {
             this.bottom.unshift(userId);
         }
         else if(position === 'support'){
-            console.log('gg');
             this.support.unshift(userId);
         }
     }
 
     //userId와 positin을 받아서 해당 list의 user를 지움
     removeUser(userId, position){
+        console.log('removeUser :'+ this.num+2+" "+userId +" "+position);
         if(position === 'top'){
             for(var i = this.top.length-1; i--;){
                 if(this.top[i] === userId) this.top.splice(i,1);

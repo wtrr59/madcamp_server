@@ -67,15 +67,27 @@ io.on('connection', function(socket){
 
     if(rooms[roomNumber].detectMatched() == true){
       var matched = rooms[roomNumber].removeSet();
-      if(roomNumber + 4 < 144) rooms[roomNumber+4].removeUser(userId, userPosi);
-      if(roomNumber + 8 < 144) rooms[roomNumber+8].removeUser(userId, userPosi);
-      if(roomNumber + 12 < 144) rooms[roomNumber+12].removeUser(userId, userPosi);
-      if(roomNumber - 4 >= 0) rooms[roomNumber-4].removeUser(userId, userPosi);
-      if(roomNumber - 8 >= 0) rooms[roomNumber-8].removeUser(userId, userPosi);
-      if(roomNumber - 12 >= 0) rooms[roomNumber-12].removeUser(userId, userPosi);
-
       io.sockets.emit("matchComplete", matched);
     }
   });
+
+  socket.on('exitRoom', function(data){
+    userId = data.userId;
+    userPosi = data.userPosi;
+    roomNumber = data.roomNumber;
+
+    rooms[roomNumber].re
+  });
+
+  socket.on('ready', function(data){
+    io.sockets.emit('receiveReady', data);
+    console.log('send ready');
+  });
+
+  socket.on('unready', function(data){
+    io.sockets.emit('receiveUnReady', data);
+    console.log('send unready');
+  });
+
 });
 
