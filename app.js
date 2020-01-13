@@ -7,9 +7,18 @@ var bodyParser = require('body-parser');
 var app = require('express')();
 var server = require('http').createServer(app);
 var socketio = require('socket.io')(server);
+var room = require('./models/room');
+
+var rooms = [];
+
+for(var i = 0 ; i < 144 ; i++){
+  var num;
+  num = i%16 %8 %4;
+  room_ = new room(num);
+  rooms.push(room_);
+}
 
 const port = process.env.PORT || 80;
-
 
 // Body-parser
 app.use(bodyParser.json({limit: '50mb'}));
@@ -48,6 +57,25 @@ io.on('connection', function(socket){
     };
     io.sockets.emit('serverMessage', message);
   });
-});
 
+  socket.on('enterRoom', function(data){
+    userId = data.userId;
+    userPosi = data.userPosi;
+    roomNumber = data.roomNumber;
+    
+    rooms[roomNumber].addUser(userId, userPosi);
+
+    if(rooms[roomNumber].detectMatched() == true){
+      var matched = rooms[roomNumber].removeSet();
+      if(roomNumber + 4 < 144) rooms[roomNumber+4].removeUser(userId, userPosi);
+      if(roomNumber + 8 < 144) rooms[roomNumber+8].removeUser(userId, userPosi);
+      if(roomNumber + 12 < 144) rooms[roomNumber+12].removeUser(userId, userPosi);
+      if(roomNumber - 4 >= 0) rooms[roomNumber-4].removeUser(userId, userPosi);
+      if(roomNumber - 8 >= 0) rooms[roomNumber-8].removeUser(userId, userPosi);
+      if(roomNumber - 12 >= 0) rooms[roomNumber-12].removeUser(userId, userPosi);
+
+      io.sockets.emit("matchComplete", matched);
+    }
+  });
+});
 

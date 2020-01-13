@@ -38,7 +38,6 @@ router.get('/all', (req, res) => {
     .catch(err => res.status(404).send({err : 'User not found'}));
 });
 
-
 // user 정보(이름) 수정
 router.put('/user/:userid', (req, res) => {
   User.updateByUserid(req.params.userid, req.body)
