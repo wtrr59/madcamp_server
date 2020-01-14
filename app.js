@@ -61,32 +61,49 @@ io.on('connection', function(socket){
   socket.on('enterRoom', function(data){
     userId = data.userId;
     userPosi = data.userPosi;
-    roomNumber = data.roomNumber;
+    roomNumbers_ = data.roomNumbers;
+    roomNumbers_ = roomNumbers_.substring(1, roomNumbers_.length-1);
+    roomNumbers = roomNumbers_.split(', ');
     
-    rooms[roomNumber].addUser(userId, userPosi);
+    for(var i = 0; i < roomNumbers.length; i++){
+      rooms[roomNumbers[i]].addUser(userId, userPosi);
 
-    if(rooms[roomNumber].detectMatched() == true){
-      var matched = rooms[roomNumber].removeSet();
-      /*if(roomNumber + 4 < 144) rooms[roomNumber+4].removeUser(userId, userPosi);
-      if(roomNumber + 8 < 144) rooms[roomNumber+8].removeUser(userId, userPosi);
-      if(roomNumber + 12 < 144) rooms[roomNumber+12].removeUser(userId, userPosi);
-      if(roomNumber - 4 >= 0) rooms[roomNumber-4].removeUser(userId, userPosi);
-      if(roomNumber - 8 >= 0) rooms[roomNumber-8].removeUser(userId, userPosi);
-      if(roomNumber - 12 >= 0) rooms[roomNumber-12].removeUser(userId, userPosi);*/
-
-      io.sockets.emit("matchComplete", matched);
+      if(rooms[roomNumbers[i]].detectMatched() == true){
+        var matched = rooms[roomNumbers[i]].removeSet();
+        io.sockets.emit("matchComplete", matched);
+      }
+  
+      top_ = rooms[roomNumbers[i]].gettop();
+      console.log('top : '+top_);
+      jungle_ = rooms[roomNumbers[i]].getjungle();
+      console.log('jungle : '+jungle_);
+      mid_ = rooms[roomNumbers[i]].getmid();
+      console.log('mid : '+mid_);
+      bottom_ = rooms[roomNumbers[i]].getbottom();
+      console.log('bottom : '+bottom_);
+      support_ = rooms[roomNumbers[i]].getsupport();
+      console.log('support : '+support_);
     }
   });
 
-  socket.on('MakeChatRoom',function(data){
-    console.log(data.roomid);
-    console.log(' room join');
-    Chat.create(data,function(){
-      socket.join(data.roomid);
-      console.log(data.roomid);
-      console.log(' room join');
-    })
-    .catch(err => res.status(500).send(err));
+  socket.on('exitRoom', function(data){
+    userId = data.userId;
+    userPosi = data.userPosi;
+    roomNumber = data.roomNumber;
+
+    rooms[roomNumber].removeUser(userId, userPosi);
+
+    top_ = rooms[roomNumber].gettop();
+    console.log('top : '+top_);
+    jungle_ = rooms[roomNumber].getjungle();
+    console.log('jungle : '+jungle_);
+    mid_ = rooms[roomNumber].getmid();
+    console.log('mid : '+mid_);
+    bottom_ = rooms[roomNumber].getbottom();
+    console.log('bottom : '+bottom_);
+    support_ = rooms[roomNumber].getsupport();
+    console.log('support : '+support_);
+
   });
 
   socket.on('ready', function(data){
