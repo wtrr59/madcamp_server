@@ -116,5 +116,10 @@ io.on('connection', function(socket){
     console.log('send unready');
   });
 
+  socket.on('leaveRoom', function(data){
+    io.sockets.emit('leaveRoom', data);
+    console.log('닷지');
+  });
+
 });
 
