@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
   hope_num: {type: Number},
   hope_position: {type: [String]},
   hope_voice: {type: String},
-  aboutMe: {type: String, required: true},
+  aboutMe: {type: String, required: true}
 },
 {
   versionKey: false    

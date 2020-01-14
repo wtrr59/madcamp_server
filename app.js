@@ -8,7 +8,7 @@ var app = require('express')();
 var server = require('http').createServer(app);
 var socketio = require('socket.io')(server);
 var room = require('./models/room');
-
+var Chat = require('./models/chat');
 var rooms = [];
 
 for(var i = 0 ; i < 144 ; i++){
@@ -67,15 +67,36 @@ io.on('connection', function(socket){
 
     if(rooms[roomNumber].detectMatched() == true){
       var matched = rooms[roomNumber].removeSet();
-      if(roomNumber + 4 < 144) rooms[roomNumber+4].removeUser(userId, userPosi);
+      /*if(roomNumber + 4 < 144) rooms[roomNumber+4].removeUser(userId, userPosi);
       if(roomNumber + 8 < 144) rooms[roomNumber+8].removeUser(userId, userPosi);
       if(roomNumber + 12 < 144) rooms[roomNumber+12].removeUser(userId, userPosi);
       if(roomNumber - 4 >= 0) rooms[roomNumber-4].removeUser(userId, userPosi);
       if(roomNumber - 8 >= 0) rooms[roomNumber-8].removeUser(userId, userPosi);
-      if(roomNumber - 12 >= 0) rooms[roomNumber-12].removeUser(userId, userPosi);
+      if(roomNumber - 12 >= 0) rooms[roomNumber-12].removeUser(userId, userPosi);*/
 
       io.sockets.emit("matchComplete", matched);
     }
+  });
+
+  socket.on('MakeChatRoom',function(data){
+    console.log(data.roomid);
+    console.log(' room join');
+    Chat.create(data,function(){
+      socket.join(data.roomid);
+      console.log(data.roomid);
+      console.log(' room join');
+    })
+    .catch(err => res.status(500).send(err));
+  });
+
+  socket.on('ready', function(data){
+    io.sockets.emit('receiveReady', data);
+    console.log('send ready');
+  });
+
+  socket.on('unready', function(data){
+    io.sockets.emit('receiveUnReady', data);
+    console.log('send unready');
   });
 });
 
