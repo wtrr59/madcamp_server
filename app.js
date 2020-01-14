@@ -123,5 +123,10 @@ io.on('connection', function(socket){
     .catch();
     console.log('arrived and send');
   });
+
+  socket.on('leaveRoom', function(data){
+    io.sockets.emit('leaveRoom', data);
+    console.log('닷지');
+  });
 });
 
