@@ -1,10 +1,11 @@
 const mongoose = require('mongoose');
 
 const chatSchema = new mongoose.Schema({
-    userid: { type: String, required: true, unique:true }, //facebook account, 하나의 계정만 만들도록
-    nickname: {type: String, required: true }, //닉네임은 중복 가능
+    chatuserid: { type: String, required: true}, 
+    nickname: {type: String, required: true}, 
     text: {type: String, required: true},
-    time: {type: String, required: true},
+    texttime: {type: String, required: true},
+    roomid: {type: String, required: true}
   },
   {
     versionKey: false    
@@ -15,6 +16,19 @@ const chatSchema = new mongoose.Schema({
     const chat = new this(payload);
     // return Promise
     return chat.save();
+  };
+
+  chatSchema.statics.deleteByRoomid = function (roomid) {
+    return this.deleteMany({ roomid });
+  };
+  
+  chatSchema.statics.findUserAll = function (roomid) {
+    // return promise
+    // V4부터 exec() 필요없음
+    if(roomid === undefined){ 
+      return this.find({ })
+    }
+    return this.find({ roomid });
   };
   
   module.exports = mongoose.model('Chat', chatSchema);

@@ -40,6 +40,7 @@ mongoose.connect(process.env.DB_URI, { useNewUrlParser: true, useFindAndModify:t
 app.use('/images', require('./routes/images'));
 app.use('/gatherings', require('./routes/gatherings'));*/
 app.use('/users', require('./routes/users'));
+app.use('/chats', require('./routes/chats'));
 
 
 
@@ -114,6 +115,13 @@ io.on('connection', function(socket){
   socket.on('unready', function(data){
     io.sockets.emit('receiveUnReady', data);
     console.log('send unready');
+  });
+
+  socket.on('sendnewmsg', function(data){
+    Chat.create(data)
+    .then(io.sockets.emit('arrivednewmsg', data))
+    .catch();
+    console.log('arrived and send');
   });
 });
 
