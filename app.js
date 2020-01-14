@@ -8,7 +8,7 @@ var app = require('express')();
 var server = require('http').createServer(app);
 var socketio = require('socket.io')(server);
 var room = require('./models/room');
-
+var Chat = require('./models/chat');
 var rooms = [];
 
 for(var i = 0 ; i < 144 ; i++){
@@ -115,11 +115,14 @@ io.on('connection', function(socket){
     io.sockets.emit('receiveUnReady', data);
     console.log('send unready');
   });
+<<<<<<< HEAD
 
   socket.on('leaveRoom', function(data){
     io.sockets.emit('leaveRoom', data);
     console.log('닷지');
   });
 
+=======
+>>>>>>> 110ae6c499b4a05dc7b43e5218c7ffd2a598e31a
 });
 

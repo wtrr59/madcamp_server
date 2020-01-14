@@ -6,9 +6,9 @@ router.post('/login', (req, res) => {
   User.findOne({id : req.body.id, password : req.body.password})
     .then((users) => {
       if (!users.length)
-        res.send('성공');
-      return res.status(500).send('실패');
+        return res.send('성공');
       
+      res.status(500).send('실패');
     })
     .catch(err => res.status(404).send('실패'));
 });
@@ -16,7 +16,7 @@ router.post('/login', (req, res) => {
 // 신규 user 등록
 router.post('/sign', (req, res) => {
   User.create(req.body)
-    .then(user => res.send('성공'))
+    .then(user => {return res.send('성공')})
     .catch(err => res.status(500).send(err));
 });
 
@@ -37,6 +37,7 @@ router.get('/all', (req, res) => {
     })
     .catch(err => res.status(404).send({err : 'User not found'}));
 });
+
 
 // user 정보(이름) 수정
 router.put('/user/:userid', (req, res) => {
