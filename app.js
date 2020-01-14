@@ -84,24 +84,6 @@ io.on('connection', function(socket){
       support_ = rooms[roomNumbers[i]].getsupport();
       console.log('support : '+support_);
     }
-
-    // rooms[roomNumber].addUser(userId, userPosi);
-
-    // if(rooms[roomNumber].detectMatched() == true){
-    //   var matched = rooms[roomNumber].removeSet();
-    //   io.sockets.emit("matchComplete", matched);
-    // }
-
-    // top_ = rooms[roomNumber].gettop();
-    // console.log('top : '+top_);
-    // jungle_ = rooms[roomNumber].getjungle();
-    // console.log('jungle : '+jungle_);
-    // mid_ = rooms[roomNumber].getmid();
-    // console.log('mid : '+mid_);
-    // bottom_ = rooms[roomNumber].getbottom();
-    // console.log('bottom : '+bottom_);
-    // support_ = rooms[roomNumber].getsupport();
-    // console.log('support : '+support_);
   });
 
   socket.on('exitRoom', function(data){
